@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#source-window {
+  width: 500px;
+  height: 300px;
+  margin: 20px 50px;
+  padding: 10px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+}
+
+#code-output {
+  width: 500px;
+  height: 200px;
+  margin: 20px 50px;
+  padding: 10px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+}
