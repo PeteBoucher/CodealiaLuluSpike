@@ -1,32 +1,57 @@
+var editor;
 (function() {
 
-  function evaluateCode(code, print) {
+  function evaluateRaw(code, print) {
     eval(code);
   }
 
   (function() {
-    var codeWindow, codeOutput, output;
+    var codeOutput, output, isExecuting;
 
     function print(input) {
       output += input.toString() + "\n";
+      if (!isExecuting) {
+        display();
+      }
     }
 
     function display() {
       codeOutput.innerText = output;
       codeOutput.scrollTop = codeOutput.scrollHeight;
     }
+
+    function evaluateCode(editor) {
+      var code = editor.getSession().getValue();
+      output = "";
+      isExecuting = true;
+      try {
+        evaluateRaw(code, print);
+      } catch(e) {
+        // do something smart
+      }
+      isExecuting = false;
+      display();
+
+      return true;
+    }
  
     window.onload = function() {
-      codeWindow = document.getElementById("code-window");
+      // can experiment with themes here: http://ace.c9.io/build/kitchen-sink.html
+      editor = ace.edit("editor");
+      editor.setTheme("ace/theme/dreamweaver");
+      editor.setFontSize(14);
+      editor.getSession().setMode("ace/mode/javascript");
+
       codeOutput = document.getElementById("code-output");
-      codeWindow.onkeydown = function(event) {
-        if (event.keyCode == 13 && event.shiftKey) {
-          event.preventDefault();
-          output = "";
-          evaluateCode(codeWindow.innerText, print);
-          display();
-        }
-      }
+
+      editor.commands.addCommand({
+        name: "run",
+        bindKey: {
+          win: "Shift-Enter",
+          mac: "Command-Enter"
+        },
+        exec: evaluateCode
+      });
     }
- })()
-})()
+ })();
+})();
