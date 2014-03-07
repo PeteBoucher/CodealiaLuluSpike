@@ -1,27 +1,32 @@
 (function() {
 
   function evaluateCode(code, print) {
-    eval(code)
+    eval(code);
   }
 
   (function() {
-    var codeWindow, codeOutput;
+    var codeWindow, codeOutput, output;
 
     function print(input) {
-      codeOutput.innerText += input.toString() + "\n"
+      output += input.toString() + "\n";
+    }
+
+    function display() {
+      codeOutput.innerText = output;
+      codeOutput.scrollTop = codeOutput.scrollHeight;
     }
  
     window.onload = function() {
-      codeWindow = document.getElementById("source-window")
-      codeOutput = document.getElementById("code-output")
+      codeWindow = document.getElementById("code-window");
+      codeOutput = document.getElementById("code-output");
       codeWindow.onkeydown = function(event) {
         if (event.keyCode == 13 && event.shiftKey) {
-          event.preventDefault()
-          codeOutput.innerText = ""
-          evaluateCode(codeWindow.innerText, print)
+          event.preventDefault();
+          output = "";
+          evaluateCode(codeWindow.innerText, print);
+          display();
         }
       }
-      codeWindow.innerHTML = "This is now a different set of code"
     }
  })()
 })()
